@@ -6,6 +6,7 @@ using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.IoC;
 using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.WebApi.Middleware;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -60,6 +61,13 @@ public class Program
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            builder.Services.AddValidatorsFromAssembly(typeof(ApplicationLayer).Assembly);
+
+            builder.Services.AddTransient(
+                typeof(IPipelineBehavior<,>),
+                typeof(ValidationBehavior<,>)
+            );
 
             app.UseHttpsRedirection();
 
